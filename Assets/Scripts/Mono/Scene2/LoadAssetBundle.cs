@@ -2,97 +2,59 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class LoadAssetBundle : MonoBehaviour
+public static class LoadAssetBundle
 {
-    [SerializeField]
-    RuntimeAnimatorController controller;
-
-    string bundleURL = "https://drive.google.com/uc?export=download&id=1AKvG42ETGUatIw6O_sbyhM5hWSwYkA06";
-    int version = 12;
-
-    GameObject temp;
-    UnityAction action;
-
-    public void ButtonClick()
-    {
-        Settings.CurrentLevel = "MainMenu";
-        SceneManager.LoadScene("LoadingScreen");
-    }
-
-    IEnumerator DownloadAndCache()
+    //open these for future purposes(for another levels, for exmpl.)
+    public static string manifestURL = "https://drive.google.com/uc?export=download&id=1LmGKAk6xwuA0GHQS8C7ODQpPjwnj-ynu";
+    public static string bundleURL = "https://drive.google.com/uc?export=download&id=1AKvG42ETGUatIw6O_sbyhM5hWSwYkA06";
+    public static bool running = false;
+    public static IEnumerator DownloadAndCache()
     {
         while (!Caching.ready)
             yield return null;
 
-        var www = WWW.LoadFromCacheOrDownload(bundleURL, version);
-        yield return www;
+        running = true;
 
-        if (!string.IsNullOrEmpty(www.error))
+        //checking version
+        var request = UnityWebRequest.Get(manifestURL);
+        yield return request.SendWebRequest();
+        running = false;
+
+        Hash128 hash = default;
+
+        var hashRow = request.downloadHandler.text.ToString().Split("\n".ToCharArray())[5];
+        hash = Hash128.Parse(hashRow.Split(':')[1].Trim());
+
+        if (hash.isValid == true)
         {
-            Debug.Log(www.error);
-            yield break;
+            request.Dispose();
+            //checking hash version and download new if needed
+            request = UnityWebRequestAssetBundle.GetAssetBundle(bundleURL, hash, 0);
+
+            yield return request.SendWebRequest();
+            running = false;
+
+            if (request.result != UnityWebRequest.Result.ProtocolError && request.result != UnityWebRequest.Result.ConnectionError)
+            {
+                Settings.assetBundle = DownloadHandlerAssetBundle.GetContent(request);
+                request.Dispose();
+                yield return null;
+                running = false;
+            }
+            else
+            {
+                yield return null;
+                running = false;
+            }
         }
-        Debug.Log("Bundle Downloaded!!!");
-        var assetbundle = www.assetBundle;
-
-        var manpf = assetbundle.LoadAssetAsync("ManPf", typeof(GameObject));
-        yield return manpf;
-
-        var terrain = assetbundle.LoadAssetAsync("Terrain", typeof(GameObject));
-        yield return terrain;
-
-        var coin = assetbundle.LoadAssetAsync("CoinPF", typeof(GameObject));
-        yield return coin;
-
-        var AllRoutes = assetbundle.LoadAssetAsync("AllRoutes", typeof(GameObject));
-        yield return AllRoutes;
-
-        var canvas = assetbundle.LoadAssetAsync("Scene2_UI", typeof(GameObject));
-        yield return canvas;
-
-        //UI
-        temp = Instantiate(canvas.asset as GameObject, new Vector3(0, 0, 0), Quaternion.identity);
-        //Non of these worls  -_-"
-        //Method 1
-        /*
-        temp.transform.GetChild(1).gameObject.GetComponent<Button>().onClick.RemoveAllListeners();
-        action += temp.GetComponent<AudioSource>().Play;
-        action += gameObject.GetComponent<Scene2>().ButtonMenu;
-        temp.transform.GetChild(1).gameObject.GetComponent<Button>().onClick.AddListener(action);
-        */
-        //method 2
-        /*
-        temp.transform.GetChild(1).gameObject.GetComponent<Button>().onClick.AddListener(gameObject.GetComponent<Scene2>().ButtonMenu);
-        temp.transform.GetChild(1).gameObject.GetComponent<Button>().onClick.AddListener(temp.GetComponent<AudioSource>().Play);
-        */
-
-        //coin
-        GameObject CoinGO = coin.asset as GameObject;
-        CoinGO.AddComponent<Rotation>().y = 0.5f;
-
-        //terrain
-        temp = Instantiate(terrain.asset as GameObject, new Vector3(0, 0, 0), Quaternion.identity);
-        temp.AddComponent<CoinSpawner>().Coin = CoinGO;
-        temp.isStatic = true;
-
-        //routes
-        GameObject Routes = Instantiate(AllRoutes.asset as GameObject, new Vector3(0, 0, 0), Quaternion.identity);
-
-        //manPF
-        temp = Instantiate(manpf.asset as GameObject, new Vector3(0, 0, 0), Quaternion.identity);
-        //shuld change scale in assetbundle prefab, but, lazy me)
-        temp.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
-
-        temp.tag = "Player";
-        temp.AddComponent<BezierFollow>().speed = 0.3f;
-        temp.GetComponent<BezierFollow>().routes.Initialize();
-        temp.GetComponent<BezierFollow>().routes[0] = Routes.transform.GetChild(0).transform;
-        temp.GetComponent<BezierFollow>().routes[1] = Routes.transform.GetChild(1).transform;
-        temp.GetComponent<BezierFollow>().routes[2] = Routes.transform.GetChild(2).transform;
-
-        temp.GetComponent<Animator>().runtimeAnimatorController = controller;
+        else
+        {
+            yield return null;
+            running = false;
+        }
     }
 }

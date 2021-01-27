@@ -371,7 +371,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1852454218}
   - component: {fileID: 1852454217}
-  - component: {fileID: 1852454219}
   m_Layer: 0
   m_Name: LevelSettings
   m_TagString: Untagged
@@ -391,6 +390,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43e09b9406c8c1e489bfce16c8ef0f17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controller: {fileID: 9100000, guid: 3755ab0bf69fe3443a07d17b5338c458, type: 2}
   coins: 0
 --- !u!4 &1852454218
 Transform:
@@ -406,19 +406,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1852454219
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1852454216}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 485745292db75754f81f75edc53a1bbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  controller: {fileID: 9100000, guid: 3755ab0bf69fe3443a07d17b5338c458, type: 2}
 --- !u!4 &2002231720 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7232375151051109882, guid: 59efa7692bd2979409edadac369b8da6, type: 3}

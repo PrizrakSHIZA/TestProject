@@ -15,6 +15,7 @@ public class SceneLoader : MonoBehaviour
     {
         anim = gameObject.GetComponent<Animation>();
         StartCoroutine(LoadSceneAsync());
+        StartCoroutine(LoadAssetBundle.DownloadAndCache());
     }
 
     IEnumerator LoadSceneAsync()
@@ -26,7 +27,7 @@ public class SceneLoader : MonoBehaviour
             slider.value = gameLevel.progress;
             yield return new WaitForEndOfFrame();
 
-            if (gameLevel.progress >= 0.9f)
+            if (gameLevel.progress >= 0.9f && !LoadAssetBundle.running)
             {
                 anim.Play("FadeOut");
             }

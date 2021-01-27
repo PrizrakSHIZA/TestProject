@@ -8,6 +8,7 @@ public class MainMenu : MonoBehaviour
 {
     Animation anim;
     GameObject eventsystem;
+    GameObject NotificationWindow;
 
     private void Start()
     {
@@ -34,6 +35,11 @@ public class MainMenu : MonoBehaviour
 
     public void ButtonPlay()
     {
+        if (Application.internetReachability == NetworkReachability.NotReachable)
+        {
+            anim.Play("Notification");
+            return;
+        }
         eventsystem.SetActive(false);
         anim.Play("FadeOut");
     }
