@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 41ee23486f1e28540ba9809f8694edc3
+guid: 6755a78c79a2dd74f8a5faa8f219e021
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable:
@@ -137,7 +137,7 @@ ModelImporter:
     second: //RootNode
   - first:
       74: 7400000
-    second: Z_attack_A
+    second: m_melee_combat_attack_A
   - first:
       95: 9500000
     second: //RootNode
@@ -171,11 +171,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Z_attack_A
+      name: m_melee_combat_attack_A
       takeName: Take 001
       internalID: 0
-      firstFrame: 0
-      lastFrame: 30
+      firstFrame: 6
+      lastFrame: 6.1
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -184,7 +184,7 @@ ModelImporter:
       hasAdditiveReferencePose: 0
       loopTime: 0
       loopBlend: 0
-      loopBlendOrientation: 1
+      loopBlendOrientation: 0
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
@@ -912,7 +912,7 @@ ModelImporter:
     hasTranslationDoF: 1
     hasExtraRoot: 0
     skeletonHasParents: 0
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: f88c8301226fd194cbbc64e25b20d567, type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: eb062aa776e44954d94c4c2f76ebc148, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1

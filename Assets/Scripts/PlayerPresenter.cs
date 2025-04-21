@@ -6,6 +6,8 @@ public class PlayerPresenter : IPlayerPresenter
     PlayerModel model;
     Rigidbody rb;
 
+    bool canAttack = true;
+
     public PlayerPresenter(IPlayerView view, Rigidbody rb)
     { 
         model = new PlayerModel();
@@ -15,7 +17,10 @@ public class PlayerPresenter : IPlayerPresenter
 
     public void Attack()
     {
-        throw new System.NotImplementedException();
+        if (canAttack)
+        {
+            
+        }
     }
 
     public void ChangeWeapon(int index)
@@ -25,10 +30,10 @@ public class PlayerPresenter : IPlayerPresenter
 
     public void Move(Vector3 direction)
     {
-        rb.AddForce(direction.normalized * model.moveSpeed * 10f);
+        rb.AddForce(direction * model.moveSpeed * 10f);
         // Speed limit
-        if (rb.velocity.magnitude > model.moveSpeed)
-            rb.velocity = rb.velocity.normalized * model.moveSpeed;
+        if (rb.velocity.magnitude > model.maxSpeed)
+            rb.velocity = rb.velocity.normalized * model.maxSpeed;
     }
 
     public void Aim(float horizontalInput, float verticalInput)

@@ -7,6 +7,7 @@ public class PlayerView : MonoBehaviour, IPlayerView
     [SerializeField] FixedJoystick joystickAim;
     [SerializeField] CinemachineFreeLook CMFreeLook;
     [SerializeField] Rigidbody rb;
+    [SerializeField] Animator animator;
 
     PlayerPresenter presenter;
 
@@ -19,7 +20,7 @@ public class PlayerView : MonoBehaviour, IPlayerView
 
     public void Attack()
     {
-        throw new System.NotImplementedException();
+        presenter.Attack();
     }
 
     public void TakeDamage()
@@ -29,23 +30,18 @@ public class PlayerView : MonoBehaviour, IPlayerView
 
     public void HandleAim()
     {
-        if (joystickAim.Vertical != 0 && joystickAim.Horizontal != 0)
-        { 
-            // Redirecting inputs to cinamchine, cuz virtual joystick doersn` work with Input system(which CM is using by default)
-            CMFreeLook.m_XAxis.Value += joystickAim.Horizontal * CMFreeLook.m_XAxis.m_MaxSpeed * Time.deltaTime;
-            CMFreeLook.m_YAxis.Value -= joystickAim.Vertical * CMFreeLook.m_YAxis.m_MaxSpeed * Time.deltaTime;
+        // Redirecting inputs to cinamchine, cuz virtual joystick doersn` work with Input system(which CM is using by default)
+        CMFreeLook.m_XAxis.Value += joystickAim.Horizontal * CMFreeLook.m_XAxis.m_MaxSpeed * Time.deltaTime;
+        CMFreeLook.m_YAxis.Value -= joystickAim.Vertical * CMFreeLook.m_YAxis.m_MaxSpeed * Time.deltaTime;
 
-            presenter.Aim(joystickAim.Horizontal, joystickAim.Vertical);
-        }
+        presenter.Aim(joystickAim.Horizontal, joystickAim.Vertical);
     }
 
     public void HandleMovement()
     {
-        if (joystickMovement.Horizontal != 0 && joystickMovement.Vertical != 0)
-        {
-            moveDirection = transform.forward * joystickMovement.Vertical + transform.right * joystickMovement.Horizontal;
-            presenter.Move(moveDirection);
-        }
+        moveDirection = transform.forward * joystickMovement.Vertical + transform.right * joystickMovement.Horizontal;
+        animator.SetFloat("MoveInput", Mathf.Abs(joystickMovement.Horizontal) + Mathf.Abs(joystickMovement.Vertical));
+        presenter.Move(moveDirection);
     }
 
     private void Update()
