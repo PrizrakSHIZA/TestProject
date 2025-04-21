@@ -30,4 +30,15 @@ public class PlayerPresenter : IPlayerPresenter
         if (rb.velocity.magnitude > model.moveSpeed)
             rb.velocity = rb.velocity.normalized * model.moveSpeed;
     }
+
+    public void Aim(float horizontalInput, float verticalInput)
+    {
+        Vector3 viewDir = view.transform.position - new Vector3(Camera.main.transform.position.x, view.transform.position.y, Camera.main.transform.position.z);
+        view.transform.forward = viewDir.normalized;
+
+        Vector3 inputDir = view.transform.forward * verticalInput + view.transform.right * horizontalInput;
+
+        if (inputDir != Vector3.zero)
+            view.transform.forward = Vector3.Slerp(view.transform.forward, inputDir.normalized, Time.deltaTime * model.rotationSpeed);
+    }
 }

@@ -31,14 +31,16 @@ public class PlayerView : MonoBehaviour, IPlayerView
     {
         if (joystickAim.Vertical != 0 && joystickAim.Horizontal != 0)
         { 
+            // Redirecting inputs to cinamchine, cuz virtual joystick doersn` work with Input system(which CM is using by default)
             CMFreeLook.m_XAxis.Value += joystickAim.Horizontal * CMFreeLook.m_XAxis.m_MaxSpeed * Time.deltaTime;
             CMFreeLook.m_YAxis.Value -= joystickAim.Vertical * CMFreeLook.m_YAxis.m_MaxSpeed * Time.deltaTime;
+
+            presenter.Aim(joystickAim.Horizontal, joystickAim.Vertical);
         }
     }
 
     public void HandleMovement()
     {
-        // Handle movement
         if (joystickMovement.Horizontal != 0 && joystickMovement.Vertical != 0)
         {
             moveDirection = transform.forward * joystickMovement.Vertical + transform.right * joystickMovement.Horizontal;
