@@ -1,5 +1,5 @@
 
-public class PlayerModel
+public class PlayerData
 {
     public int hp = 10;
     public float moveSpeed = 3f;
