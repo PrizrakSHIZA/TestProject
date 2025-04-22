@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c3678f6c24ee324e9a2c8e1549ba555, type: 3}
+  m_Name: Sai
+  m_EditorClassIdentifier: 
+  id: 4
+  damage: 0
+  projectileForce: 100
+  attackCD: 2
+  LookAtVelocity: 1
+  prefab: {fileID: 8602439958637242122, guid: ace767c6300da7f4386f6bd667160322, type: 3}
+  rotationOffset: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  positionOffset: {x: -0.196, y: 0, z: 0}

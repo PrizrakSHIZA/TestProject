@@ -1,7 +1,7 @@
 using Cinemachine;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IPawn
 {
     [SerializeField] FixedJoystick joystickMovement;
     [SerializeField] FixedJoystick joystickAim;
@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Animator animator;
     [SerializeField] Transform weaponPos;
 
+    GameObject weaponInHand;
     PlayerData data;
     WeaponSO currentWeapon;
     Vector3 moveDirection;
@@ -19,32 +20,50 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         data = new PlayerData();
+        ChangeWeapon(1);
     }
 
     public void TakeDamage(int damage)
     {
-        throw new System.NotImplementedException();
+        Debug.Log($"Take damage {damage}");
     }
 
     public void Attack()
     {
         if (canAttack)
-        { 
+        {
+            canAttack = false;
             animator.SetTrigger("Attack");
-            // Start CD timer
+            Invoke(nameof(ResetAttack), currentWeapon.attackCD);
         }
+    }
+
+    void ResetAttack()
+    {
+        canAttack = true;
+        weaponInHand.SetActive(true);
     }
 
     public void LaunchProjectile()
     {
-        var projectile = Instantiate(currentWeapon.prefab, weaponPos);
-        projectile.transform.rotation = currentWeapon.rotationOffset;
-        //projectile.AddComponent<WeaponData>();
+        weaponInHand.SetActive(false); // Visually hide weapon
+        var weapon = Instantiate(currentWeapon.prefab);
+        weapon.transform.position = weaponPos.position;
+        weapon.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward * currentWeapon.projectileForce + Camera.main.transform.up * 5f);
+        var projectile = weapon.AddComponent<Projectile>();
+        projectile.weaponSO = currentWeapon;
+        projectile.rb.AddForce(Camera.main.transform.forward * currentWeapon.projectileForce + Camera.main.transform.up * 5f, ForceMode.Impulse);
+        projectile.GetComponent<Collider>().enabled = true;
     }
 
-    public void ChangeWeapon(int index)
+    public void ChangeWeapon(int id)
     {
-        throw new System.NotImplementedException();
+        Destroy(weaponInHand);
+        currentWeapon = Weapons.Singleton.List.Find(x => x.id == id);
+        weaponInHand = Instantiate(currentWeapon.prefab, weaponPos);
+        weaponInHand.transform.localRotation = currentWeapon.rotationOffset;
+        weaponInHand.transform.localPosition = currentWeapon.positionOffset;
+        weaponInHand.GetComponent<Rigidbody>().isKinematic = true;
     }
 
     public void Move(Vector3 direction)
