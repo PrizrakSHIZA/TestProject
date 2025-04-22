@@ -17,9 +17,10 @@ public class Projectile : MonoBehaviour
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy")
         {
             collision.gameObject.GetComponent<IPawn>().TakeDamage(weaponSO.damage);
-            transform.SetParent(collision.gameObject.transform);
+            Destroy(gameObject);
         }
         rb.isKinematic = true;
+        Invoke(nameof(DestroyMe), 20);
     }
 
     private void FixedUpdate()
@@ -28,5 +29,10 @@ public class Projectile : MonoBehaviour
         {
             transform.rotation = Quaternion.LookRotation(rb.velocity);
         }
+    }
+
+    void DestroyMe()
+    { 
+        Destroy(gameObject);
     }
 }

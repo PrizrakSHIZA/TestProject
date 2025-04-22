@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 6
   damage: 10
-  projectileForce: 100
+  projectileForce: 30
   attackCD: 0.5
+  LookAtVelocity: 0
   prefab: {fileID: 2161237019854272208, guid: 7aea674dde605654bb02d391a561b479, type: 3}
   rotationOffset: {x: 0, y: 0, z: 0, w: 0}
   positionOffset: {x: 0, y: 0, z: 0.08}
