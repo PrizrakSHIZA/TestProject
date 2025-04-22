@@ -62,6 +62,11 @@ public class PlayerController : MonoBehaviour, IPawn
         Destroy(weaponInHand);
         currentWeapon = Weapons.Singleton.List.Find(x => x.id == id);
         weaponInHand = Instantiate(currentWeapon.prefab, weaponPos);
+        // Easy search because of simple architecture. For more complex architecture should be changed(Trails should be stored in Projectile)
+        for (int i = 0; i < weaponInHand.transform.childCount; i++)
+        {
+            weaponInHand.transform.GetChild(i).gameObject.SetActive(false);
+        }        
         weaponInHand.transform.localRotation = currentWeapon.rotationOffset;
         weaponInHand.transform.localPosition = currentWeapon.positionOffset;
         weaponInHand.GetComponent<Rigidbody>().isKinematic = true;
