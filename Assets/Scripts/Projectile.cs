@@ -4,6 +4,7 @@ public class Projectile : MonoBehaviour
 {
     public Rigidbody rb;
     public WeaponSO weaponSO;
+    public GameObject ignore;
 
     private void Awake()
     {
@@ -13,6 +14,7 @@ public class Projectile : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (rb.isKinematic) return;
+        if (collision.gameObject == ignore) return;
 
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Enemy")
         {

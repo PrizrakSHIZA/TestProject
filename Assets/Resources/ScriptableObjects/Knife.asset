@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponSO
   id: 1
   damage: 20
-  projectileForce: 20
+  projectileForce: 15
   attackCD: 2
   LookAtVelocity: 1
   prefab: {fileID: 5989632653911487472, guid: 11ac62c515e811046b82a249d009c1fb, type: 3}

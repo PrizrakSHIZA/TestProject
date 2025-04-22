@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour, IPawn
     private void Start()
     {
         data = new PlayerData();
-        ChangeWeapon(4);
+        ChangeWeapon(6);
     }
 
     public void TakeDamage(int damage)
@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour, IPawn
         weapon.transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward * currentWeapon.projectileForce + Camera.main.transform.up * 5f);
         var projectile = weapon.AddComponent<Projectile>();
         projectile.weaponSO = currentWeapon;
+        projectile.ignore = gameObject;
         projectile.rb.AddForce(Camera.main.transform.forward * currentWeapon.projectileForce + Camera.main.transform.up * 5f, ForceMode.Impulse);
         projectile.GetComponent<Collider>().enabled = true;
     }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 6
   damage: 10
-  projectileForce: 30
+  projectileForce: 50
   attackCD: 0.5
   LookAtVelocity: 0
   prefab: {fileID: 2161237019854272208, guid: 7aea674dde605654bb02d391a561b479, type: 3}
