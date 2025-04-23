@@ -44,7 +44,8 @@ public class Enemy : MonoBehaviour, IPawn
         // Damage Calc
         data.hp -= damage;
         if (data.hp <= 0)
-        { 
+        {
+            GameController.Singleton.EnemyKilled();
             animator.SetTrigger("Death");
             Invoke(nameof(AutoDestroy), 5f);
             rb.isKinematic = true;

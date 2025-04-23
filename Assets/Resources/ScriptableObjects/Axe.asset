@@ -17,7 +17,8 @@ MonoBehaviour:
   projectileForce: 10
   attackCD: 3
   LookAtVelocity: 0
-  price: 0
+  price: 400
+  icon: {fileID: 21300000, guid: 95a2148eed1243440b0dedd36c7d9570, type: 3}
   prefab: {fileID: 701423848169469978, guid: acd201c8cf00ed64bb3e95557b6303f1, type: 3}
   rotationOffset: {x: -0.7071068, y: 0, z: 0.7071068, w: 0}
   positionOffset: {x: 0, y: 0, z: 0.077}

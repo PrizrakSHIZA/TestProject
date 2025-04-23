@@ -29,6 +29,11 @@ public class PlayerController : MonoBehaviour, IPawn
         ChangeWeapon(1);
     }
 
+    public void SetHealth(int amount)
+    {
+        data.hp = amount;
+    }
+
     public void TakeDamage(int damage)
     {
         //Animation 
@@ -39,11 +44,13 @@ public class PlayerController : MonoBehaviour, IPawn
 
         // Damage calc
         data.hp -= damage;
+        GameController.Singleton.PlayerHealthChanged(data.hp);
         if (data.hp <= 0)
         {
             animator.SetTrigger("Death");
             rb.isKinematic = true;
             this.enabled = false;
+            GameController.Singleton.GameEnd();
         }
     }
 

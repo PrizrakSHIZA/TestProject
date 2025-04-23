@@ -9,12 +9,14 @@ public class GameController : MonoBehaviour
 
     [SerializeField] List<Transform> spawnPositions;
     [SerializeField] List<GameObject> enemies;
+    [SerializeField] OverlayUI overlayUI;
 
     public Transform weaponPool;
     public PlayerController player;
     public List<WeaponSO> weaponList = new();
 
     int totalEnemies = 0;
+    int money = 0;
     float spawnCD = 20;
 
     void Awake()
@@ -28,14 +30,32 @@ public class GameController : MonoBehaviour
         StartCoroutine(NextSpawn());
     }
 
-    public void GameEnd()
-    { 
-        
+    public void PurchaseItem(int id)
+    {
+        if (id == 0) // health buy
+        {
+            if (money >= 100)
+            {
+                money -= 100;
+                overlayUI.UpdateCoins(money);
+                player.SetHealth(100);
+                overlayUI.UpdateHealth(100);
+            }
+        }
+        else
+        {
+            if (money >= weaponList[id].price)
+            {
+                money -= weaponList[id].price;
+                player.ChangeWeapon(id);
+                overlayUI.UpdateCoins(money);
+            }
+        }
     }
 
-    public void OpenShop()
-    { 
-        
+    public void GameEnd()
+    {
+        overlayUI.OpenGameEndMenu();
     }
 
     public void SpawnEnemy()
@@ -48,6 +68,13 @@ public class GameController : MonoBehaviour
     public void EnemyKilled()
     { 
         totalEnemies--;
+        money += Random.Range(5, 16);
+        overlayUI.UpdateCoins(money);
+    }
+
+    public void PlayerHealthChanged(int newValue)
+    {
+        overlayUI.UpdateHealth(newValue);
     }
 
     IEnumerator NextSpawn()
