@@ -1247,5 +1247,7 @@ MonoBehaviour:
   isMelee: 1
   rb: {fileID: 7341929434962597816}
   animator: {fileID: 6868898625554697822}
-  weaponPos: {fileID: 0}
-  meleePos: {fileID: 6868898625562189846}
+  weaponPos: {fileID: 6868898625562189846}
+  meleePos: {fileID: 616331952846785394}
+  bodyRenderer: {fileID: 6868898625550464828}
+  headRenderer: {fileID: 6868898625563959896}

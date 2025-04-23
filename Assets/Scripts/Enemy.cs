@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class Enemy : MonoBehaviour, IPawn
 {
@@ -7,14 +8,17 @@ public class Enemy : MonoBehaviour, IPawn
     [SerializeField] Animator animator;
     [SerializeField] Transform weaponPos;
     [SerializeField] Transform meleePos;
-    [SerializeField] Material material;
+    [SerializeField] SkinnedMeshRenderer bodyRenderer;
+    [SerializeField] MeshRenderer headRenderer;
 
 
     GameObject weaponInHand;
     PawnData data;
     WeaponSO currentWeapon;
+    Material headMaterial, bodyMaterial;
     Vector3 moveDirection;
     Vector3 simulatedInput = Vector3.zero;
+    Vector3 lastPlayerPos;
 
     bool canAttack = true;
     bool canMove = true;
@@ -22,12 +26,20 @@ public class Enemy : MonoBehaviour, IPawn
     private void Start()
     {
         data = new PawnData(50, 3, 5, 0);
+        headMaterial = headRenderer.material;
+        bodyMaterial = bodyRenderer.material;
         ChangeWeapon(isMelee ? Random.Range(0, 7) : Random.Range(1, 7));
     }
 
     public void TakeDamage(int damage)
     {
-        //material
+        // Animation
+        headMaterial.DORewind();
+        bodyMaterial.DORewind();
+        headMaterial.DOColor(Color.red, .2f).SetEase(Ease.Flash).SetLoops(2, LoopType.Yoyo);
+        bodyMaterial.DOColor(Color.red, .2f).SetEase(Ease.Flash).SetLoops(2, LoopType.Yoyo);
+
+        // Damage Calc
     }
 
     public void Attack()
@@ -39,6 +51,7 @@ public class Enemy : MonoBehaviour, IPawn
             {
                 animator.SetTrigger("MeleeAttack");
                 Invoke(nameof(ResetAttack), 3f);
+                lastPlayerPos = GameController.Singleton.player.transform.position;
                 canMove = false;
             }
             else
@@ -64,7 +77,7 @@ public class Enemy : MonoBehaviour, IPawn
     {
         if (isMelee)
         {
-            var colliders = Physics.OverlapSphere(meleePos.position, 1f);
+            var colliders = Physics.OverlapSphere(meleePos.position, .5f);
             foreach (var collider in colliders)
             {
                 if (collider.tag == "Player")
@@ -104,6 +117,14 @@ public class Enemy : MonoBehaviour, IPawn
 
     public void HandleAim()
     {
+        if (isMelee && !canMove)
+        {
+            transform.LookAt(lastPlayerPos);
+            Vector3 rot2 = transform.rotation.eulerAngles;
+            rot2.x = 0;
+            transform.rotation = Quaternion.Euler(rot2);
+            return;
+        }
         transform.LookAt(GameController.Singleton.player.transform);
         Vector3 rot = transform.rotation.eulerAngles;
         rot.x = 0;
@@ -134,16 +155,15 @@ public class Enemy : MonoBehaviour, IPawn
 
     private void Update()
     {
+        HandleAim();
+
         if (isMelee)
         {
-            if(canMove)
-                HandleAim();
             if (Vector3.Distance(GameController.Singleton.player.transform.position, transform.position) <= 1.5)
                 Attack();
         }
         else
         {
-            HandleAim();
             if (Vector3.Distance(GameController.Singleton.player.transform.position, transform.position) <= 10)
                 Attack();
         }

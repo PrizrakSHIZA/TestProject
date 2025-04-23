@@ -1049,7 +1049,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2af2f0bb3b56ce04f8dfacf61a0d56b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controller: {fileID: 4812306563014870496}
 --- !u!1 &7470064536440900558
 GameObject:
   m_ObjectHideFlags: 0
@@ -1188,6 +1187,8 @@ MonoBehaviour:
   rb: {fileID: 2016175147541782237}
   animator: {fileID: 7134521947065368007}
   weaponPos: {fileID: 4947422981406351018}
+  bodyRenderer: {fileID: 1366684069388798837}
+  headRenderer: {fileID: 2660000887886707789}
 --- !u!1 &8063065969347968894
 GameObject:
   m_ObjectHideFlags: 0

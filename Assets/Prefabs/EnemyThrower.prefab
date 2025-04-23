@@ -1183,6 +1183,8 @@ MonoBehaviour:
   animator: {fileID: 327686926813370884}
   weaponPos: {fileID: 6922986868365489398}
   meleePos: {fileID: 616331952846785394}
+  bodyRenderer: {fileID: 1500206481277650654}
+  headRenderer: {fileID: 8541812430348277335}
 --- !u!1 &8903844249457902183
 GameObject:
   m_ObjectHideFlags: 0

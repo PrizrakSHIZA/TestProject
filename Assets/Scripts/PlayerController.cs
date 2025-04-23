@@ -1,4 +1,5 @@
 using Cinemachine;
+using DG.Tweening;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour, IPawn
@@ -9,10 +10,13 @@ public class PlayerController : MonoBehaviour, IPawn
     [SerializeField] Rigidbody rb;
     [SerializeField] Animator animator;
     [SerializeField] Transform weaponPos;
+    [SerializeField] SkinnedMeshRenderer bodyRenderer;
+    [SerializeField] MeshRenderer headRenderer;
 
     GameObject weaponInHand;
     PawnData data;
     WeaponSO currentWeapon;
+    Material headMaterial, bodyMaterial;
     Vector3 moveDirection;
 
     bool canAttack = true;
@@ -20,12 +24,20 @@ public class PlayerController : MonoBehaviour, IPawn
     private void Start()
     {
         data = new PawnData();
+        headMaterial = headRenderer.material;
+        bodyMaterial = bodyRenderer.material;
         ChangeWeapon(1);
     }
 
     public void TakeDamage(int damage)
     {
-        Debug.Log($"Take damage {damage}");
+        //Animation 
+        headMaterial.DORewind();
+        bodyMaterial.DORewind();
+        headMaterial.DOColor(Color.red, .2f).SetEase(Ease.Flash).SetLoops(2, LoopType.Yoyo);
+        bodyMaterial.DOColor(Color.red, .2f).SetEase(Ease.Flash).SetLoops(2, LoopType.Yoyo);
+
+        // Damage calc
     }
 
     public void Attack()
