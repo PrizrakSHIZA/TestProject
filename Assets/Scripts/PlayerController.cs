@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour, IPawn
         Vector3 attackVector = Camera.main.transform.forward * currentWeapon.projectileForce + Camera.main.transform.up * 5f;
         weaponInHand.SetActive(false); // Visually hide weapon
         var weapon = Instantiate(currentWeapon.prefab);
+        weapon.transform.parent = GameController.Singleton.weaponPool;
         weapon.transform.position = weaponPos.position;
         weapon.transform.rotation = Quaternion.LookRotation(attackVector);
         var projectile = weapon.AddComponent<Projectile>();

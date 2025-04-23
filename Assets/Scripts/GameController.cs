@@ -6,6 +6,7 @@ public class GameController : MonoBehaviour
 {
     public static GameController Singleton;
 
+    public Transform weaponPool;
     public PlayerController player;
     public List<WeaponSO> weaponList = new();
 

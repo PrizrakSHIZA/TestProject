@@ -45,6 +45,7 @@ public class Enemy : MonoBehaviour, IPawn
         Vector3 attackVector = transform.forward * currentWeapon.projectileForce + transform.up * currentWeapon.AIAimCorrection.y - transform.right * currentWeapon.AIAimCorrection.x;
         weaponInHand.SetActive(false); // Visually hide weapon
         var weapon = Instantiate(currentWeapon.prefab);
+        weapon.transform.parent = GameController.Singleton.weaponPool;
         weapon.transform.position = weaponPos.position;
         weapon.transform.rotation = Quaternion.LookRotation(attackVector);
         var projectile = weapon.AddComponent<Projectile>();
