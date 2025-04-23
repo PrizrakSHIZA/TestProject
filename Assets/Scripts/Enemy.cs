@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, IPawn
 {
+    [SerializeField] bool isMelee = false;
     [SerializeField] Rigidbody rb;
     [SerializeField] Animator animator;
     [SerializeField] Transform weaponPos;
@@ -10,6 +11,7 @@ public class Enemy : MonoBehaviour, IPawn
     PawnData data;
     WeaponSO currentWeapon;
     Vector3 moveDirection;
+    Vector3 simulatedInput = Vector3.zero;
 
     bool canAttack = true;
 
@@ -95,6 +97,9 @@ public class Enemy : MonoBehaviour, IPawn
         else if ((transform.position - GameController.Singleton.player.transform.position).magnitude < 8)
             direction = -(GameController.Singleton.player.transform.position - transform.position).normalized;
 
+        simulatedInput = Vector3.Slerp(simulatedInput, direction, Time.deltaTime * 5f);
+        Debug.Log(simulatedInput);
+        animator.SetFloat("MoveInput", simulatedInput.magnitude);
         rb.MovePosition(transform.position + direction * Time.fixedDeltaTime * data.moveSpeed);
     }
 

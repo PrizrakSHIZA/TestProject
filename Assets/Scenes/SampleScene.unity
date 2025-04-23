@@ -986,6 +986,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0af3d11bf96268d48ae2e28c15464a5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMelee: 0
   rb: {fileID: 952155124}
   animator: {fileID: 5233154718404967274}
   weaponPos: {fileID: 5233154718413952290}
