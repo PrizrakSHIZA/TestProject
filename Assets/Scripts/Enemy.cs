@@ -97,7 +97,7 @@ public class Enemy : MonoBehaviour, IPawn
         }
         else
         { 
-            Vector3 attackVector = transform.forward * currentWeapon.projectileForce + transform.up * currentWeapon.AIAimCorrection.y - transform.right * currentWeapon.AIAimCorrection.x;
+            Vector3 attackVector = transform.forward * currentWeapon.projectileForce + transform.up * (currentWeapon.AIAimCorrection.y + Random.Range(-.5f, .5f)) - transform.right * (currentWeapon.AIAimCorrection.x + Random.Range(-.5f, .5f));
             weaponInHand.SetActive(false); // Visually hide weapon
             var weapon = Instantiate(currentWeapon.prefab);
             weapon.transform.parent = GameController.Singleton.weaponPool;
