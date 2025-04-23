@@ -7,6 +7,8 @@ public class Enemy : MonoBehaviour, IPawn
     [SerializeField] Animator animator;
     [SerializeField] Transform weaponPos;
     [SerializeField] Transform meleePos;
+    [SerializeField] Material material;
+
 
     GameObject weaponInHand;
     PawnData data;
@@ -25,7 +27,7 @@ public class Enemy : MonoBehaviour, IPawn
 
     public void TakeDamage(int damage)
     {
-        Debug.Log($"Take damage {damage}");
+        //material
     }
 
     public void Attack()
