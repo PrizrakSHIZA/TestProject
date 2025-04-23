@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour, IPawn
     [SerializeField] Rigidbody rb;
     [SerializeField] Animator animator;
     [SerializeField] Transform weaponPos;
+    [SerializeField] Transform meleePos;
 
     GameObject weaponInHand;
     PawnData data;
@@ -14,11 +15,12 @@ public class Enemy : MonoBehaviour, IPawn
     Vector3 simulatedInput = Vector3.zero;
 
     bool canAttack = true;
+    bool canMove = true;
 
     private void Start()
     {
         data = new PawnData(50, 3, 5, 0);
-        ChangeWeapon(1);
+        ChangeWeapon(isMelee ? Random.Range(0, 7) : Random.Range(1, 7));
     }
 
     public void TakeDamage(int damage)
@@ -31,9 +33,23 @@ public class Enemy : MonoBehaviour, IPawn
         if (canAttack)
         {
             canAttack = false;
-            animator.SetTrigger("Attack");
-            Invoke(nameof(ResetAttack), currentWeapon.attackCD);
+            if (isMelee)
+            {
+                animator.SetTrigger("MeleeAttack");
+                Invoke(nameof(ResetAttack), 3f);
+                canMove = false;
+            }
+            else
+            { 
+                animator.SetTrigger("Attack");
+                Invoke(nameof(ResetAttack), currentWeapon.attackCD);
+            }
         }
+    }
+
+    public void StopAttack()
+    {
+        canMove = true;
     }
 
     void ResetAttack()
@@ -44,17 +60,29 @@ public class Enemy : MonoBehaviour, IPawn
 
     public void LaunchProjectile()
     {
-        Vector3 attackVector = transform.forward * currentWeapon.projectileForce + transform.up * currentWeapon.AIAimCorrection.y - transform.right * currentWeapon.AIAimCorrection.x;
-        weaponInHand.SetActive(false); // Visually hide weapon
-        var weapon = Instantiate(currentWeapon.prefab);
-        weapon.transform.parent = GameController.Singleton.weaponPool;
-        weapon.transform.position = weaponPos.position;
-        weapon.transform.rotation = Quaternion.LookRotation(attackVector);
-        var projectile = weapon.AddComponent<Projectile>();
-        projectile.weaponSO = currentWeapon;
-        projectile.ignore = gameObject;
-        projectile.rb.AddForce(attackVector, ForceMode.Impulse);
-        projectile.GetComponent<Collider>().enabled = true;
+        if (isMelee)
+        {
+            var colliders = Physics.OverlapSphere(meleePos.position, 1f);
+            foreach (var collider in colliders)
+            {
+                if (collider.tag == "Player")
+                    collider.GetComponent<IPawn>().TakeDamage(currentWeapon.damage);
+            }
+        }
+        else
+        { 
+            Vector3 attackVector = transform.forward * currentWeapon.projectileForce + transform.up * currentWeapon.AIAimCorrection.y - transform.right * currentWeapon.AIAimCorrection.x;
+            weaponInHand.SetActive(false); // Visually hide weapon
+            var weapon = Instantiate(currentWeapon.prefab);
+            weapon.transform.parent = GameController.Singleton.weaponPool;
+            weapon.transform.position = weaponPos.position;
+            weapon.transform.rotation = Quaternion.LookRotation(attackVector);
+            var projectile = weapon.AddComponent<Projectile>();
+            projectile.weaponSO = currentWeapon;
+            projectile.ignore = gameObject;
+            projectile.rb.AddForce(attackVector, ForceMode.Impulse);
+            projectile.GetComponent<Collider>().enabled = true;
+        }
     }
 
     public void ChangeWeapon(int id)
@@ -72,14 +100,6 @@ public class Enemy : MonoBehaviour, IPawn
         weaponInHand.GetComponent<Rigidbody>().isKinematic = true;
     }
 
-    public void Move(Vector3 direction)
-    {
-        rb.AddForce(direction * data.moveSpeed * 10f);
-        // Speed limit
-        if (rb.velocity.magnitude > data.maxSpeed)
-            rb.velocity = rb.velocity.normalized * data.maxSpeed;
-    }
-
     public void HandleAim()
     {
         transform.LookAt(GameController.Singleton.player.transform);
@@ -92,22 +112,39 @@ public class Enemy : MonoBehaviour, IPawn
     {
         Vector3 direction = Vector3.zero;
 
-        if ((transform.position - GameController.Singleton.player.transform.position).magnitude > 10)
-            direction = (GameController.Singleton.player.transform.position - transform.position).normalized;
-        else if ((transform.position - GameController.Singleton.player.transform.position).magnitude < 8)
-            direction = -(GameController.Singleton.player.transform.position - transform.position).normalized;
+        if (isMelee && canMove)
+        {
+            if ((transform.position - GameController.Singleton.player.transform.position).magnitude > 1.5f)
+                direction = (GameController.Singleton.player.transform.position - transform.position).normalized;
+        }
+        else if (!isMelee)
+        { 
+            if ((transform.position - GameController.Singleton.player.transform.position).magnitude > 10)
+                direction = (GameController.Singleton.player.transform.position - transform.position).normalized;
+            else if ((transform.position - GameController.Singleton.player.transform.position).magnitude < 8)
+                direction = -(GameController.Singleton.player.transform.position - transform.position).normalized;
+        }
 
         simulatedInput = Vector3.Slerp(simulatedInput, direction, Time.deltaTime * 5f);
-        Debug.Log(simulatedInput);
         animator.SetFloat("MoveInput", simulatedInput.magnitude);
         rb.MovePosition(transform.position + direction * Time.fixedDeltaTime * data.moveSpeed);
     }
 
     private void Update()
     {
-        HandleAim();
-        if (Vector3.Distance(GameController.Singleton.player.transform.position, transform.position) <= 10)
-            Attack();
+        if (isMelee)
+        {
+            if(canMove)
+                HandleAim();
+            if (Vector3.Distance(GameController.Singleton.player.transform.position, transform.position) <= 1.5)
+                Attack();
+        }
+        else
+        {
+            HandleAim();
+            if (Vector3.Distance(GameController.Singleton.player.transform.position, transform.position) <= 10)
+                Attack();
+        }
     }
 
     private void FixedUpdate()

@@ -13,4 +13,9 @@ public class EventReciever : MonoBehaviour
     {
         pawn.LaunchProjectile();
     }
+
+    void StopAttack()
+    { 
+        pawn.StopAttack();
+    }
 }

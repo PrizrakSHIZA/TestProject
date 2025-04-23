@@ -38,6 +38,11 @@ public class PlayerController : MonoBehaviour, IPawn
         }
     }
 
+    public void StopAttack()
+    {
+        // Not needed - not melee attack on player
+    }
+
     void ResetAttack()
     {
         canAttack = true;
