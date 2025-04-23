@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5099707009005550513}
   m_Layer: 0
   m_Name: Knife
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -113,7 +113,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 112
   m_CollisionDetection: 1
 --- !u!135 &5099707009005550513
 SphereCollider:
@@ -135,7 +135,7 @@ SphereCollider:
   m_Enabled: 0
   serializedVersion: 3
   m_Radius: 0.05
-  m_Center: {x: 0, y: 0, z: 0.1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &9041670465174574970
 PrefabInstance:
   m_ObjectHideFlags: 0

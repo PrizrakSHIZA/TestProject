@@ -2,13 +2,16 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    Collider collider;
+
     public Rigidbody rb;
     public WeaponSO weaponSO;
     public GameObject ignore;
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();    
+        rb = GetComponent<Rigidbody>();
+        collider = GetComponent<Collider>();
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -21,6 +24,9 @@ public class Projectile : MonoBehaviour
             collision.gameObject.GetComponent<IPawn>().TakeDamage(weaponSO.damage);
             Destroy(gameObject);
         }
+        else if (collision.gameObject.tag == "Weapon") Destroy(gameObject);
+
+        collider.enabled = false;
         rb.isKinematic = true;
         Invoke(nameof(DestroyMe), 20);
     }

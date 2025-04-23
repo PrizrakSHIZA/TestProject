@@ -320,7 +320,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 365081948}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.14096506, y: 0, z: 0, w: 0.9900146}
+  m_LocalRotation: {x: 0.14096503, y: 0.000000029504738, z: -0.000000004201086, w: 0.9900146}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -500,8 +500,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 438352917}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.12293387, y: 0, z: 0, w: 0.9924149}
-  m_LocalPosition: {x: 0, y: 0, z: 0.0000009536743}
+  m_LocalRotation: {x: 0.12293386, y: 6.276709e-16, z: -7.508234e-17, w: 0.9924149}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -606,8 +606,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 502190188}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.104909785, y: 0, z: 0, w: 0.99448174}
-  m_LocalPosition: {x: 0, y: 0, z: 0.0000009536743}
+  m_LocalRotation: {x: 0.10490978, y: -0.0000000120141355, z: 0.0000000012673939, w: 0.99448174}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -903,7 +903,7 @@ GameObject:
   - component: {fileID: 952155125}
   m_Layer: 0
   m_Name: EnemyThrower
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3063,8 +3063,8 @@ SceneRoots:
   - {fileID: 413533754}
   - {fileID: 1833666179619661509}
   - {fileID: 3038645859955580118}
+  - {fileID: 952155122}
   - {fileID: 1553682805}
   - {fileID: 1124664531}
   - {fileID: 1535064858}
   - {fileID: 889229667}
-  - {fileID: 952155122}

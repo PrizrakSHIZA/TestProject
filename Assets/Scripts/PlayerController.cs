@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour, IPawn
     private void Start()
     {
         data = new PawnData();
-        ChangeWeapon(6);
+        ChangeWeapon(1);
     }
 
     public void TakeDamage(int damage)
