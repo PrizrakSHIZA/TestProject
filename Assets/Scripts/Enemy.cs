@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour, IPawn
     private void Start()
     {
         data = new PawnData(50, 3, 5, 0);
-        ChangeWeapon(5);
+        ChangeWeapon(1);
     }
 
     public void TakeDamage(int damage)
@@ -42,7 +42,7 @@ public class Enemy : MonoBehaviour, IPawn
 
     public void LaunchProjectile()
     {
-        Vector3 attackVector = transform.forward * currentWeapon.projectileForce + transform.up * 8.5f - transform.right * 0.5f;
+        Vector3 attackVector = transform.forward * currentWeapon.projectileForce + transform.up * currentWeapon.AIAimCorrection.y - transform.right * currentWeapon.AIAimCorrection.x;
         weaponInHand.SetActive(false); // Visually hide weapon
         var weapon = Instantiate(currentWeapon.prefab);
         weapon.transform.position = weaponPos.position;

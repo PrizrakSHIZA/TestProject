@@ -17,6 +17,8 @@ MonoBehaviour:
   projectileForce: 15
   attackCD: 2
   LookAtVelocity: 1
+  price: 0
   prefab: {fileID: 5989632653911487472, guid: 11ac62c515e811046b82a249d009c1fb, type: 3}
   rotationOffset: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   positionOffset: {x: -0.122, y: 0, z: 0}
+  AIAimCorrection: {x: 1, y: 2}

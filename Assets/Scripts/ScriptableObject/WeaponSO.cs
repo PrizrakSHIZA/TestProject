@@ -8,7 +8,9 @@ public class WeaponSO : ScriptableObject
     public float projectileForce;
     public float attackCD;
     public bool LookAtVelocity;
+    public int price;
     public GameObject prefab;
     public Quaternion rotationOffset;
     public Vector3 positionOffset;
+    public Vector2 AIAimCorrection;
 }
