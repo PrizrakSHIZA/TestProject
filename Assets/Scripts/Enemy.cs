@@ -1,11 +1,7 @@
-using Cinemachine;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour, IPawn
+public class Enemy : MonoBehaviour, IPawn
 {
-    [SerializeField] FixedJoystick joystickMovement;
-    [SerializeField] FixedJoystick joystickAim;
-    [SerializeField] CinemachineFreeLook CMFreeLook;
     [SerializeField] Rigidbody rb;
     [SerializeField] Animator animator;
     [SerializeField] Transform weaponPos;
@@ -19,8 +15,8 @@ public class PlayerController : MonoBehaviour, IPawn
 
     private void Start()
     {
-        data = new PawnData();
-        ChangeWeapon(6);
+        data = new PawnData(50, 3, 5, 0);
+        ChangeWeapon(5);
     }
 
     public void TakeDamage(int damage)
@@ -46,7 +42,7 @@ public class PlayerController : MonoBehaviour, IPawn
 
     public void LaunchProjectile()
     {
-        Vector3 attackVector = Camera.main.transform.forward * currentWeapon.projectileForce + Camera.main.transform.up * 5f;
+        Vector3 attackVector = transform.forward * currentWeapon.projectileForce + transform.up * 8.5f - transform.right * 0.5f;
         weaponInHand.SetActive(false); // Visually hide weapon
         var weapon = Instantiate(currentWeapon.prefab);
         weapon.transform.position = weaponPos.position;
@@ -67,7 +63,7 @@ public class PlayerController : MonoBehaviour, IPawn
         for (int i = 0; i < weaponInHand.transform.childCount; i++)
         {
             weaponInHand.transform.GetChild(i).gameObject.SetActive(false);
-        }        
+        }
         weaponInHand.transform.localRotation = currentWeapon.rotationOffset;
         weaponInHand.transform.localPosition = currentWeapon.positionOffset;
         weaponInHand.GetComponent<Rigidbody>().isKinematic = true;
@@ -81,36 +77,31 @@ public class PlayerController : MonoBehaviour, IPawn
             rb.velocity = rb.velocity.normalized * data.maxSpeed;
     }
 
-    public void Aim(float horizontalInput, float verticalInput)
-    {
-        Vector3 viewDir = transform.position - new Vector3(Camera.main.transform.position.x, transform.position.y, Camera.main.transform.position.z);
-        transform.forward = viewDir.normalized;
-
-        Vector3 inputDir = transform.forward * verticalInput + transform.right * horizontalInput;
-
-        if (inputDir != Vector3.zero)
-            transform.forward = Vector3.Slerp(transform.forward, inputDir.normalized, Time.deltaTime * data.rotationSpeed);
-    }
-
     public void HandleAim()
     {
-        // Redirecting inputs to cinamchine, cuz virtual joystick doersn` work with Input system(which CM is using by default)
-        CMFreeLook.m_XAxis.Value += joystickAim.Horizontal * CMFreeLook.m_XAxis.m_MaxSpeed * Time.deltaTime;
-        CMFreeLook.m_YAxis.Value -= joystickAim.Vertical * CMFreeLook.m_YAxis.m_MaxSpeed * Time.deltaTime;
-
-        Aim(joystickAim.Horizontal, joystickAim.Vertical);
+        transform.LookAt(GameController.Singleton.player.transform);
+        Vector3 rot = transform.rotation.eulerAngles;
+        rot.x = 0;
+        transform.rotation = Quaternion.Euler(rot);
     }
 
     public void HandleMovement()
     {
-        moveDirection = transform.forward * joystickMovement.Vertical + transform.right * joystickMovement.Horizontal;
-        animator.SetFloat("MoveInput", Mathf.Abs(joystickMovement.Horizontal) + Mathf.Abs(joystickMovement.Vertical));
-        Move(moveDirection);
+        Vector3 direction = Vector3.zero;
+
+        if ((transform.position - GameController.Singleton.player.transform.position).magnitude > 10)
+            direction = (GameController.Singleton.player.transform.position - transform.position).normalized;
+        else if ((transform.position - GameController.Singleton.player.transform.position).magnitude < 8)
+            direction = -(GameController.Singleton.player.transform.position - transform.position).normalized;
+
+        rb.MovePosition(transform.position + direction * Time.fixedDeltaTime * data.moveSpeed);
     }
 
     private void Update()
     {
         HandleAim();
+        if (Vector3.Distance(GameController.Singleton.player.transform.position, transform.position) <= 10)
+            Attack();
     }
 
     private void FixedUpdate()

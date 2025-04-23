@@ -2,10 +2,15 @@ using UnityEngine;
 
 public class EventReciever : MonoBehaviour
 {
-    [SerializeField] PlayerController controller;
+    IPawn pawn;
+
+    private void Start()
+    {
+        pawn = transform.parent.gameObject.GetComponent<IPawn>();
+    }
 
     void ThrowFrame()
     {
-        controller.LaunchProjectile();
+        pawn.LaunchProjectile();
     }
 }
