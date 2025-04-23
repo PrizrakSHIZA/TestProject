@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour, IPawn
     PawnData data;
     WeaponSO currentWeapon;
     Material headMaterial, bodyMaterial;
+    CapsuleCollider collider;
     Vector3 moveDirection;
     Vector3 simulatedInput = Vector3.zero;
     Vector3 lastPlayerPos;
@@ -28,6 +29,7 @@ public class Enemy : MonoBehaviour, IPawn
         data = new PawnData(50, 3, 5, 0);
         headMaterial = headRenderer.material;
         bodyMaterial = bodyRenderer.material;
+        collider = GetComponent<CapsuleCollider>();
         ChangeWeapon(isMelee ? Random.Range(0, 7) : Random.Range(1, 7));
     }
 
@@ -40,6 +42,15 @@ public class Enemy : MonoBehaviour, IPawn
         bodyMaterial.DOColor(Color.red, .2f).SetEase(Ease.Flash).SetLoops(2, LoopType.Yoyo);
 
         // Damage Calc
+        data.hp -= damage;
+        if (data.hp <= 0)
+        { 
+            animator.SetTrigger("Death");
+            Invoke(nameof(AutoDestroy), 5f);
+            rb.isKinematic = true;
+            collider.enabled = false;
+            this.enabled = false;
+        }
     }
 
     public void Attack()
@@ -151,6 +162,11 @@ public class Enemy : MonoBehaviour, IPawn
         simulatedInput = Vector3.Slerp(simulatedInput, direction, Time.deltaTime * 5f);
         animator.SetFloat("MoveInput", simulatedInput.magnitude);
         rb.MovePosition(transform.position + direction * Time.fixedDeltaTime * data.moveSpeed);
+    }
+
+    void AutoDestroy()
+    {
+        Destroy(gameObject);
     }
 
     private void Update()

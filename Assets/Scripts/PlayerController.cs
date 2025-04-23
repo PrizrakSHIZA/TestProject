@@ -38,6 +38,13 @@ public class PlayerController : MonoBehaviour, IPawn
         bodyMaterial.DOColor(Color.red, .2f).SetEase(Ease.Flash).SetLoops(2, LoopType.Yoyo);
 
         // Damage calc
+        data.hp -= damage;
+        if (data.hp <= 0)
+        {
+            animator.SetTrigger("Death");
+            rb.isKinematic = true;
+            this.enabled = false;
+        }
     }
 
     public void Attack()
